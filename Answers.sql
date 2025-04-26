@@ -1,9 +1,11 @@
 -- Task 1: This will create new table users_enqs_txns based on CTE to show number of enquiries and transactions per user per date, if just want to return the output, please run CTE instead
 
+-- Create new table based of CTE
 create table users_enqs_txns as
   
     with users_enqs_txns as (
   
+        -- Count enquiries per user per date
         select
             user_id,
             date,
@@ -13,7 +15,8 @@ create table users_enqs_txns as
         group by user_id, date
 
         union all
-
+  
+        -- Count transactions per user per date
         select
             user_id,
             date,
@@ -23,7 +26,8 @@ create table users_enqs_txns as
         group by user_id, date
   
     )
-  
+
+  -- Final counts per user per date. Here we can also perform aggregation again on count_enqs and count_txns group by user_id, date to avoid multiple rows when user had both enquiries and transactions on the same date
     select
         *
     from users_enqs_txns
@@ -32,7 +36,8 @@ create table users_enqs_txns as
 -- Task 2: This will create CTE to show array of transactions per enquiry for each date and user where transaction happedned between 30 days of enquiry
 
 with last_30_days_enqs as (
-
+  
+    -- Get last 30 days transactions happedned between 30 days of enquiry
     select
         e.enquiry_id,
         e.date,
@@ -41,10 +46,11 @@ with last_30_days_enqs as (
     from enquiries e
     left join txns t on t.user_id = e.user_id
     where e.date <= t.date
-    and e.date > DATEADD(day, -30, t.date)
+    and e.date >= DATEADD(day, -30, t.date)
 
 ), earliest_enq_per_txn as (
-
+  
+    -- Filter out first enquiry for all transaction
     select
         *
     from (
@@ -57,6 +63,7 @@ with last_30_days_enqs as (
 
 )
 
+-- Final query to show list of transactions as array per enquiry for date and user
 select
     enquiry_id,
     date,
