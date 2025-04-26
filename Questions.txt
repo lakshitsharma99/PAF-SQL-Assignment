@@ -1,0 +1,32 @@
+Task 1: Enquiry and Transaction Counts
+
+In the enquiry-txn dataset, create a table that stores the number of enquiries and the
+number of transactions performed by each user on each date, without using JOIN.
+
+Expected Output Schema:
+
+Column Name, Data Type, Description
+user_id, String, Unique identifier for the user
+date, Date, Date of enquiry or transaction
+count_enqs, Integer, Number of enquiries by the user on the date
+count_txns, Integer, Number of transactions by the user on the date
+
+Task 2: Enquiry Conversion Mapping
+
+- Users express interest in a product by filling out an enquiry form.
+- An enquiry is considered converted if the user completes a transaction within 30 days of submitting the enquiry.
+- For each transaction, only the first enquiry made within the preceding 30 days is counted as converted.
+- Each transaction can be linked to atmost one enquiry.
+- However, a single enquiry may be linked to multiple transactions.
+
+Expected Output Schema:
+
+Column Name, Data Type, Description
+enquiry_id, String, Unique identifier for the enquiry
+date, Date, Date of the enquiry
+user_id, String, Unique identifier for the user
+txn_ids, Array, Array of transaction IDs linked to the enquiry; empty array if not converted
+
+Notes:
+txn_ids should be an array of transaction IDs corresponding to the enquiry.
+If the enquiry is not converted, txn_ids should be an empty array.
